@@ -1,0 +1,131 @@
+# Custom dataset params
+src_dir: /home/npatel23/gokhale_user/Crop Classification Project/Crop Classification Project/HLS_CDL_Data/sample_chips
+train_dataset_name: ''
+train_csv_path: /home/npatel23/gokhale_user/Crop Classification Project/Crop_Segmentation_Project/training.csv
+val_csv_path: /home/npatel23/gokhale_user/Crop Classification Project/Crop_Segmentation_Project/testing.csv
+test_csv_path: /home/npatel23/gokhale_user/Crop Classification Project/Crop_Segmentation_Project/testing.csv
+apply_normalization: false
+normal_strategy: z_value
+stat_procedure: gpb
+global_stats:
+  min: [1284.0, 251.0, 396.0]
+  max: [4793.0, 4286.0, 3851.0]
+  mean: [3356.680887, 1572.995616, 1228.549088]
+  std: [1192.675681, 1130.478363, 1031.660649]
+transformations:
+- v_flip
+- h_flip
+- d_flip
+- rotate
+aug_params:
+  rotation_degree: [-180, -90, 90, 180]
+
+# DataLoader
+train_BatchSize: 20
+val_test_BatchSize: 6
+
+# Model initialization params
+n_classes: 21
+input_channels: 3
+filter_config: [64, 128, 256, 512, 1024, 1024]
+use_skipAtt: false
+train_dropout_rate: 0.15
+
+# Model compiler params
+working_dir: /home/npatel23/gokhale_user/Crop Classification Project/Crop_Segmentation_Project/
+out_dir: output_small_1
+class_mapping:
+  0: Unknown
+  1: Corn
+  2: Cotton
+  3: Rice
+  4: Sorghum
+  5: Soybeans
+  6: Sunflower
+  7: Peanuts
+  8: Sweet Corn
+  9: Alfalfa
+  10: Durum Wheat
+  11: Spring Wheat
+  12: Winter Wheat
+  13: Rye
+  14: Oats
+  15: Millet
+  16: Alfalfa
+  17: Sugarcane
+  18: Almonds
+  19: other crops
+  20: non crops
+gpuDevices:
+- 0
+init_type: kaiming
+params_init: null
+freeze_params: null
+
+# Model fitting
+epochs: 20
+optimizer: sam
+LR: 0.011
+LR_policy: PolynomialLR
+criterion:
+    name: TverskyFocalLoss
+    weight:
+    - 0.000128618
+    - 0.000098086
+    - 0.000048283
+    - 0.001524678
+    - 0.211835828
+    - 0.000428856
+    - 0.000000000
+    - 0.010595200
+    - 0.000343840
+    - 0.000775505
+    - 0.001703134
+    - 0.000060244
+    - 0.002261874
+    - 0.000309763
+    - 0.603477324
+    - 0.000024479
+    - 0.166351659
+    - 0.000018390
+    - 0.000007120
+    - 0.000007120
+    ignore_index: 0
+    gamma: 0.9
+
+momentum: 0.95
+checkpoint_interval: 5
+resume: false
+resume_epoch: null
+lr_prams:
+  # StepLR & MultiStepLR
+  step_size: 3
+  milestones:
+  - 5
+  - 10
+  - 20
+  - 35
+  - 50
+  - 70
+  - 90
+  gamma: 0.98
+  # ReduceLROnPlateau
+  mode: triangular
+  factor: 0.8
+  patience: 3
+  threshold: 0.0001
+  threshold_mode: rel
+  min_lr: 3.0e-06
+  # PolynomialLR
+  max_decay_steps: 80
+  min_learning_rate: 1.0e-04
+  power: 0.85
+  # CyclicLR
+  base_lr: 3.0e-05
+  max_lr: 0.01
+  step_size_up: 1100
+  
+# Accuracy assessment
+val_metric_fname: validate_metrics_global_z_gpb.csv
+
+
